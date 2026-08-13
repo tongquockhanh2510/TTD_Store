@@ -8,8 +8,8 @@ interface LogoMarkProps {
 
 /**
  * Logo tiệm: dáng điện thoại đứng, hai bên mọc chân IC như con eMMC nhìn từ trên,
- * trong màn hình là chữ T vẽ theo kiểu đường mạch có pad hàn ở ba đầu mút.
- * Ba thứ nghề này đều nằm gọn trong một hình: máy, chip, mối hàn.
+ * trong màn hình là chữ TTD nghiêng đậm vẽ bằng path (không dùng <text>, không
+ * phụ thuộc font máy người xem). Ba thứ nghề này nằm gọn trong một hình: máy, chip, chữ tiệm.
  */
 export function LogoMark({ size = 44, className }: LogoMarkProps) {
   // useId để nhiều logo trên cùng trang không giành nhau id của gradient.
