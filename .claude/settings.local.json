@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($n = Get-Command node -ErrorAction SilentlyContinue; if \\($n\\) { \"node: \" + $n.Source } else { \"no node\" }; $p = Get-Command python -ErrorAction SilentlyContinue; if \\($p\\) { \"python: \" + $p.Source } else { \"no python\" })",
+      "PowerShell(Get-ChildItem -Force T:\\\\TTD | Select-Object Mode, Length, Name | Format-Table -AutoSize; \"---\"; \"node: \" + \\(node -v\\); \"npm: \" + \\(npm -v\\))",
+      "PowerShell(npm install --prefix T:\\\\TTD --no-audit --no-fund 2>&1)",
+      "PowerShell(\"--- node_modules ---\")"
+    ]
+  }
+}
