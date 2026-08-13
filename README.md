@@ -66,7 +66,7 @@ Mật khẩu **không được lưu ở bất kỳ đâu**, kể cả dạng bă
 
 - **Quên mật khẩu là mất kho.** Không có nút khôi phục, vì không có gì để đối chiếu.
 - **Mỗi máy một kho riêng.** Kho nằm trong `localStorage` của từng trình duyệt, không tự đồng bộ.
-  Muốn thợ có dữ liệu của tiệm thì chủ bấm **Xuất dữ liệu**, gửi file cho thợ **Nhập** vào.
+  Muốn thợ có dữ liệu của tiệm thì chủ bấm **Xuất Excel**, gửi file cho thợ **Nhập Excel** vào.
 - **Phân quyền chỉ chặt khi dùng chung một máy.** Trên máy riêng của mình, thợ tự đặt được mật khẩu
   chủ vì máy họ là kho trắng. Muốn phân quyền thật giữa nhiều máy thì phải có máy chủ và cơ sở dữ
   liệu — đó là một dự án khác.
@@ -76,9 +76,9 @@ Mật khẩu **không được lưu ở bất kỳ đâu**, kể cả dạng bă
 Hai cách:
 
 - **Trong ứng dụng** — bấm ✎ ở góc phải trên (cần mật khẩu chủ), rồi Thêm / Sửa / Xoá. Thay đổi
-  lưu ngay vào máy, dùng **Xuất dữ liệu** để giữ một bản backup.
+  lưu ngay vào máy, dùng **Xuất Excel** để giữ một bản backup.
 - **Sửa mã nguồn** — mở `src/data/emmc.ts` hoặc `src/data/emcp.ts`, thêm dòng vào mảng `codes` của
-  đúng nhóm. Cách này đổi dữ liệu gốc, chỉ có tác dụng với kho tạo mới hoặc khi bấm *Khôi phục gốc*.
+  đúng nhóm. Cách này chỉ đổi dữ liệu gốc dùng khi tạo kho mới, không ảnh hưởng kho đã tạo trên máy.
 
 > Toàn bộ 384 mã được đọc bằng mắt từ ảnh chụp hai bảng tra, nên có thể sai ở những ký tự dễ nhầm
 > (`0`/`O`, `1`/`I`, `8`/`B`). Nên đối chiếu lại những mã hay dùng nhất.
