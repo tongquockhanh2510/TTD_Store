@@ -9,7 +9,7 @@ export interface EmcpGroup {
 
 export const EMCP_GROUPS: EmcpGroup[] = [
   {
-    name: "A1",
+    name: "Vip1",
     codes: [
       "12M-B214", "KMK7X000VM-B314", "KMQ7X000SA-B315", "KMQ72000SM-B316",
       "KMQN1000SM-B316", "H9TQ64/65", "H9TP64/65", "H9TQ17AA",
@@ -19,7 +19,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A2-A3",
+    name: "Vip2-Vip3",
     codes: [
       "KMQN10013M-B318", "KMRNW0001M-B509", "KMR7X0001M-B511", "H9TQ64ABJTMC",
       "H9TQ18ABJTMC", "JZ008", "JZ011", "JZ089",
@@ -28,7 +28,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A4",
+    name: "Vip4",
     codes: [
       "KMW E6/E1 00013M-B318", "KMQ 31/82 0013M-B419", "KMR820001M-B609", "KMR310001M-B611",
       "H9TQ17ABJTMC/AC/BC", "JY932-JY950", "KMRQ4Z0013M-B809", "KMGE6001BM-B421",
@@ -38,7 +38,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A4+",
+    name: "Vip4+",
     codes: [
       "KMQD60013M-B318", "KMQ X1/X6 0013M-B419", "KMQX60013A-B419", "H9TQ26ABJTMC/AC/BC",
       "H9TQ27ABJTMC", "JZ024-JZ013", "32-24-3FTA28", "KM4X60002M-B321",
@@ -47,7 +47,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A5",
+    name: "Vip5",
     codes: [
       "KMDD60018M-B320", "KMDX10018M-B420", "KMGD6001BM-B421", "KM5H80018M-B424",
       "KMDX60018M-B425", "KMRD60014M-B512", "KMGX6001BM/BA-B514", "KMRX1/60014M-B614",
@@ -57,7 +57,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A5+",
+    name: "Vip5+",
     codes: [
       "KMGP6001BM-B514", "KMDP60018M-B425", "4DR/4CR-64G", "H9HP52ADAMAD",
       "H9TQ52ADFTAC", "H9HQ53ADAMMD", "JZ049-JZ481-JZ479", "JZ090-JZ128-JZ185",
@@ -65,7 +65,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A6",
+    name: "Vip6",
     codes: [
       "H9HQ53ACPMMD", "H9TQ52ACLTMC", "H9HQ53AECMMDAR", "H9HQ54AECMMDAR",
       "KM5 H7/P8/P9 001DM-B424", "KM3P6001CM-B517", "KM2 H7/P9 001CM-B518", "KMRH60014A/14M-B614",
@@ -75,14 +75,14 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A6+",
+    name: "Vip6+",
     codes: [
       "H9HP52ACPMMDARKMM", "H9HP52ACPMADARKMM", "H9HP53ACPMMDARKMM", "KMDH6001DM-B422",
       "KMDH6001DA-B422", "KMDP6001DB-B425", "KMDP6001DA-B425", "KM3H6001CM/CA-B515",
     ],
   },
   {
-    name: "A7",
+    name: "Vip7",
     codes: [
       "KM5L9001DM-B424", "KM2L9001CM-B518", "KMDV6001DM-B620", "KM5V7001DM-B621",
       "KM5V7/V8-001DM-B622", "KMDV6001DB-B625", "KM3V6001CM-B705", "KM2V7001CM-B706",
@@ -92,7 +92,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A8",
+    name: "Vip8",
     codes: [
       "H9HQ16AFAMMD", "H9HQ15AFAMAD", "H9HR21JFA3ME", "KM8L9001JM-B624",
       "KM8V7001JM-B810", "KM8V8001JM-B813", "KM8V9001JM-B813", "KM8V7001JA-B813",
@@ -102,7 +102,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A8+",
+    name: "Vip8+",
     codes: [
       "KM8F9001JA-B816", "H9HQ22AECMMDAR", "H9HQ21AECMZDAR", "H9QT1GGBN6",
       "H9RT1GGA65/M6X", "H9QT1G6DN6", "H9QT1GGCN6", "KM2B8001CM-BB01",
@@ -110,7 +110,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A9",
+    name: "Vip9",
     codes: [
       "KM8F8001JM-B813", "KM8F9001JM-B813", "KMAS9001PM-BC02", "KM8B8001JM-BC01",
       "H9HQ21/22 AF", "JZ396-JZ361", "KM81A001MM-BC11", "H9QT2GGMN6",
@@ -118,7 +118,7 @@ export const EMCP_GROUPS: EmcpGroup[] = [
     ],
   },
   {
-    name: "A10",
+    name: "Vip10",
     codes: [
       "KM8F800MM-B813", "KM8V8001LM-B813", "KM8F9001MM-B830", "KMAIA001PM-B819",
       "KMJIA001RM-BC07", "H9RT2GGA65", "H9RT2G7M75", "H9RT2G6AS5",
