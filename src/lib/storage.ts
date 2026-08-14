@@ -9,7 +9,7 @@ export function readVault(): Vault | null {
     const raw = localStorage.getItem(VAULT_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Vault;
-    if (!parsed?.owner || !parsed?.staff || !parsed?.data) return null;
+    if (!parsed?.owner || !parsed?.data) return null;
     return parsed;
   } catch {
     return null;

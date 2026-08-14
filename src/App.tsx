@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { ChipItem, GroupSummary, IndexedChip, Role, TableName, Vault } from "./types";
-import { SHOP } from "./config";
+import type { ChipItem, GroupSummary, IndexedChip, TableName, Vault } from "./types";
+import { DEFAULT_PASSWORD, SHOP } from "./config";
 import { buildSeedItems, newItemId } from "./data/seed";
 import { cryptoAvailable, createVault, decryptItems, encryptItems, openVault, rekeyVault } from "./lib/crypto";
 import { indexAll, indexChip, searchChips } from "./lib/search";
 import { clearLegacyItems, clearVault, readLegacyItems, readVault, writeVault } from "./lib/storage";
-import { LoginGate, SetupGate, UnsupportedGate } from "./components/Gate";
+import { LoginGate, UnsupportedGate } from "./components/Gate";
 import { LogoMark } from "./components/Logo";
 import { ChipRow, GroupGrid, ResultColumns, Section } from "./components/ChipList";
 import { ExportModal, ImportModal, ItemFormModal, PasswordModal } from "./components/Modals";
 
-type Screen = "setup" | "login" | "app" | "unsupported";
+type Screen = "login" | "app" | "unsupported";
 type TableFilter = "all" | TableName;
 type ModalState =
   | { kind: "form"; chip: IndexedChip | null }
@@ -25,7 +25,6 @@ export default function App() {
   const [screen, setScreen] = useState<Screen>(() => (cryptoAvailable() ? "login" : "unsupported"));
   const [vault, setVault] = useState<Vault | null>(null);
   const [dataKey, setDataKey] = useState<CryptoKey | null>(null);
-  const [role, setRole] = useState<Role | null>(null);
   const [items, setItems] = useState<IndexedChip[]>([]);
 
   const [query, setQuery] = useState("");
@@ -37,14 +36,26 @@ export default function App() {
   const [storageBlocked, setStorageBlocked] = useState(false);
 
   const searchRef = useRef<HTMLInputElement>(null);
-  const isOwner = role === "owner";
+  // Chỉ còn một mật khẩu (mặc định), ai mở được kho cũng có quyền sửa.
+  const isOwner = true;
 
-  /* Máy đã có kho thì hỏi mật khẩu, chưa có thì mời đặt lần đầu. */
+  /* Máy chưa có kho thì tự tạo bằng mật khẩu mặc định, khỏi phải đặt riêng từng máy. */
   useEffect(() => {
     if (!cryptoAvailable()) return;
     const existing = readVault();
-    setVault(existing);
-    setScreen(existing ? "login" : "setup");
+    if (existing) {
+      setVault(existing);
+      setScreen("login");
+      return;
+    }
+    void (async () => {
+      const startItems = readLegacyItems() ?? buildSeedItems();
+      const { vault: created } = await createVault(DEFAULT_PASSWORD, startItems);
+      if (!writeVault(created)) setStorageBlocked(true);
+      clearLegacyItems();
+      setVault(created);
+      setScreen("login");
+    })();
   }, []);
 
   const showToast = useCallback((text: string) => setToast(text), []);
@@ -75,31 +86,13 @@ export default function App() {
     [persist, vault, dataKey],
   );
 
-  const handleCreate = useCallback(
-    async (ownerPassword: string, staffPassword: string) => {
-      // Kho cũ của bản HTML một file, nếu có, được mang sang thay vì bắt nhập lại.
-      const startItems = readLegacyItems() ?? buildSeedItems();
-      const { vault: created, key } = await createVault(ownerPassword, staffPassword, startItems);
-      if (!writeVault(created)) setStorageBlocked(true);
-      clearLegacyItems();
-      setVault(created);
-      setDataKey(key);
-      setRole("owner");
-      setItems(indexAll(startItems));
-      setScreen("app");
-      showToast("Đã tạo kho — anh đang vào với quyền chủ tiệm");
-    },
-    [showToast],
-  );
-
   const handleUnlock = useCallback(
     async (password: string) => {
       if (!vault) return false;
-      const opened = await openVault(password, vault);
-      if (!opened) return false;
-      const stored = await decryptItems(opened.key, vault.data);
-      setDataKey(opened.key);
-      setRole(opened.role);
+      const key = await openVault(password, vault);
+      if (!key) return false;
+      const stored = await decryptItems(key, vault.data);
+      setDataKey(key);
       setItems(indexAll(stored));
       setScreen("app");
       return true;
@@ -110,18 +103,24 @@ export default function App() {
   const handleForget = useCallback(() => {
     clearVault();
     setVault(null);
-    setScreen("setup");
+    setDataKey(null);
+    setItems([]);
+    void (async () => {
+      const { vault: created } = await createVault(DEFAULT_PASSWORD, buildSeedItems());
+      if (!writeVault(created)) setStorageBlocked(true);
+      setVault(created);
+    })();
   }, []);
 
   const handleChangePassword = useCallback(
-    async (current: string, nextOwner: string, nextStaff: string) => {
+    async (current: string, next: string) => {
       if (!vault || !dataKey) return false;
       try {
-        const next = await rekeyVault(vault, dataKey, current, nextOwner, nextStaff);
-        setVault(next);
-        if (!writeVault(next)) setStorageBlocked(true);
+        const nextVault = await rekeyVault(vault, dataKey, current, next);
+        setVault(nextVault);
+        if (!writeVault(nextVault)) setStorageBlocked(true);
         setModal(null);
-        showToast("Đã đổi mật khẩu — nhớ báo lại cho thợ");
+        showToast("Đã đổi mật khẩu");
         return true;
       } catch {
         return false;
@@ -245,8 +244,7 @@ export default function App() {
   );
 
   if (screen === "unsupported") return <UnsupportedGate />;
-  if (screen === "setup") return <SetupGate onCreate={handleCreate} />;
-  if (screen === "login" || !role) return <LoginGate onUnlock={handleUnlock} onForget={handleForget} />;
+  if (screen === "login") return <LoginGate onUnlock={handleUnlock} onForget={handleForget} />;
 
   // Viền cam chỉ có nghĩa khi kết quả có lẫn loại khớp yếu hơn.
   const mixedScores = hits.some((hit) => hit.score > 0);

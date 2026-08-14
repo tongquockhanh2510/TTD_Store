@@ -245,45 +245,37 @@ export function ImportModal({ onImport, onClose }: ImportModalProps) {
 }
 
 interface PasswordModalProps {
-  onChange: (current: string, nextOwner: string, nextStaff: string) => Promise<boolean>;
+  onChange: (current: string, next: string) => Promise<boolean>;
   onClose: () => void;
 }
 
 export function PasswordModal({ onChange, onClose }: PasswordModalProps) {
   const [current, setCurrent] = useState("");
-  const [owner, setOwner] = useState("");
-  const [staff, setStaff] = useState("");
+  const [next, setNext] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
   async function submit(event: FormEvent) {
     event.preventDefault();
-    if (owner.length < 6 || staff.length < 6) {
-      setError("Mỗi mật khẩu mới cần ít nhất 6 ký tự.");
-      return;
-    }
-    if (owner === staff) {
-      setError("Mật khẩu chủ và thợ phải khác nhau.");
+    if (next.length < 6) {
+      setError("Mật khẩu mới cần ít nhất 6 ký tự.");
       return;
     }
     setError("");
     setBusy(true);
-    const ok = await onChange(current, owner, staff);
+    const ok = await onChange(current, next);
     if (!ok) {
       setBusy(false);
-      setError("Mật khẩu chủ hiện tại không đúng.");
+      setError("Mật khẩu hiện tại không đúng.");
     }
   }
 
   return (
     <Modal title="Đổi mật khẩu" onClose={onClose}>
       <form onSubmit={submit}>
-        <div className="msg">
-          Nhập mật khẩu chủ hiện tại để xác nhận, rồi đặt cặp mật khẩu mới. Kho sẽ được khoá lại bằng
-          cặp mới.
-        </div>
+        <div className="msg">Nhập mật khẩu hiện tại để xác nhận, rồi đặt mật khẩu mới.</div>
         <div className="field">
-          <label htmlFor="c-old">Mật khẩu chủ hiện tại</label>
+          <label htmlFor="c-old">Mật khẩu hiện tại</label>
           <input
             id="c-old"
             type="password"
@@ -294,23 +286,13 @@ export function PasswordModal({ onChange, onClose }: PasswordModalProps) {
           />
         </div>
         <div className="field">
-          <label htmlFor="c-own">Mật khẩu chủ mới</label>
+          <label htmlFor="c-own">Mật khẩu mới</label>
           <input
             id="c-own"
             type="password"
             autoComplete="new-password"
-            value={owner}
-            onChange={(e) => setOwner(e.target.value)}
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="c-stf">Mật khẩu thợ mới</label>
-          <input
-            id="c-stf"
-            type="password"
-            autoComplete="new-password"
-            value={staff}
-            onChange={(e) => setStaff(e.target.value)}
+            value={next}
+            onChange={(e) => setNext(e.target.value)}
           />
         </div>
         {error ? <div className="msg err">{error}</div> : null}

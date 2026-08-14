@@ -7,7 +7,8 @@ Tên tiệm và số điện thoại nằm gọn trong `src/config.ts`, sửa m�
 
 - **384 mã** nhập từ hai bảng tra: eMMC (nhóm `EMMC 1`–`EMMC 6` theo dung lượng) và eMCP
   (nhóm chân `A1`–`A10`).
-- Kho được **mã hoá bằng mật khẩu**, có hai vai trò: chủ tiệm sửa được, thợ chỉ tra cứu.
+- Kho được **mã hoá bằng mật khẩu**. Máy nào mở lần đầu cũng tự có kho khoá bằng mật khẩu mặc định
+  (`DEFAULT_PASSWORD` trong `src/config.ts`), khỏi phải đặt riêng từng máy.
 - Chạy được trên điện thoại, không cần mạng sau khi đã mở trang.
 
 ## Chạy trên máy
@@ -56,26 +57,24 @@ Không so sánh mật khẩu kiểu `if (mậtKhẩu === "1234")` — cách đó
 Ở đây dùng cách bọc khoá:
 
 1. Sinh một khoá dữ liệu ngẫu nhiên, dùng nó mã hoá danh sách mã (AES-GCM 256 bit).
-2. Bọc khoá đó **hai lần** — một lần bằng mật khẩu chủ, một lần bằng mật khẩu thợ
-   (PBKDF2, 200.000 vòng, SHA-256).
-3. Mở kho là thử tháo từng gói. Gói nào tháo được thì đó là vai trò của người vừa nhập.
+2. Bọc khoá đó bằng mật khẩu (PBKDF2, 200.000 vòng, SHA-256).
+3. Mở kho là thử tháo gói bằng mật khẩu vừa nhập.
 
 Mật khẩu **không được lưu ở bất kỳ đâu**, kể cả dạng băm. Xem `src/lib/crypto.ts`.
 
-### Ba giới hạn cần biết
+### Hai giới hạn cần biết
 
-- **Quên mật khẩu là mất kho.** Không có nút khôi phục, vì không có gì để đối chiếu.
+- **Đổi mật khẩu rồi mà quên là mất kho.** Mật khẩu mặc định thì khỏi lo, nhưng nếu đã đổi qua
+  mật khẩu khác (mục Đổi mật khẩu) thì không có nút khôi phục, vì không có gì để đối chiếu.
 - **Mỗi máy một kho riêng.** Kho nằm trong `localStorage` của từng trình duyệt, không tự đồng bộ.
-  Muốn thợ có dữ liệu của tiệm thì chủ bấm **Xuất Excel**, gửi file cho thợ **Nhập Excel** vào.
-- **Phân quyền chỉ chặt khi dùng chung một máy.** Trên máy riêng của mình, thợ tự đặt được mật khẩu
-  chủ vì máy họ là kho trắng. Muốn phân quyền thật giữa nhiều máy thì phải có máy chủ và cơ sở dữ
-  liệu — đó là một dự án khác.
+  Máy mới mở lên tự tạo kho bằng mật khẩu mặc định; muốn máy khác có đúng dữ liệu hiện tại thì bấm
+  **Xuất Excel** ở máy đã có dữ liệu rồi **Nhập Excel** vào máy kia.
 
 ## Sửa dữ liệu
 
 Hai cách:
 
-- **Trong ứng dụng** — bấm ✎ ở góc phải trên (cần mật khẩu chủ), rồi Thêm / Sửa / Xoá. Thay đổi
+- **Trong ứng dụng** — bấm ✎ ở góc phải trên, rồi Thêm / Sửa / Xoá. Thay đổi
   lưu ngay vào máy, dùng **Xuất Excel** để giữ một bản backup.
 - **Sửa mã nguồn** — mở `src/data/emmc.ts` hoặc `src/data/emcp.ts`, thêm dòng vào mảng `codes` của
   đúng nhóm. Cách này chỉ đổi dữ liệu gốc dùng khi tạo kho mới, không ảnh hưởng kho đã tạo trên máy.
@@ -95,7 +94,7 @@ src/
     storage.ts  đọc ghi localStorage
   components/
     Logo.tsx    logo tiệm, vẽ bằng SVG
-    Gate.tsx    màn đặt mật khẩu và màn đăng nhập
+    Gate.tsx    màn đăng nhập
     ChipList.tsx thẻ mã, lưới nhóm
     Modals.tsx  các hộp thoại thêm/sửa, xuất, nhập, đổi mật khẩu
   App.tsx     ghép mọi thứ lại, giữ trạng thái

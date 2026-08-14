@@ -24,10 +24,7 @@ export interface IndexedChip extends ChipItem {
   tokens: string[];
 }
 
-/** Vai trò mở kho. Chủ tiệm sửa được, thợ chỉ tra cứu. */
-export type Role = "owner" | "staff";
-
-/** Một khoá dữ liệu đã bọc bằng mật khẩu của một vai trò. */
+/** Một khoá dữ liệu đã bọc bằng mật khẩu. */
 export interface WrappedKey {
   salt: string;
   iv: string;
@@ -39,7 +36,6 @@ export interface Vault {
   v: 1;
   iter: number;
   owner: WrappedKey;
-  staff: WrappedKey;
   data: { iv: string; ct: string };
 }
 
