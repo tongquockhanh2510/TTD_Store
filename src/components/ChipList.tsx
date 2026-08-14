@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { IndexedChip, GroupSummary } from "../types";
+import type { SearchHit } from "../lib/search";
 import { highlightParts } from "../lib/search";
 
 interface ChipRowProps {
@@ -55,6 +56,58 @@ export function ChipRow({ chip, query, strong, showGroup = true, canEdit, onEdit
         </div>
       ) : null}
     </article>
+  );
+}
+
+export interface ResultBucket {
+  table: string;
+  name: string;
+  cap: string;
+  hits: SearchHit[];
+}
+
+interface ResultColumnsProps {
+  buckets: ResultBucket[];
+  query: string;
+  mixedScores: boolean;
+  canEdit: boolean;
+  onEdit: (chip: IndexedChip) => void;
+  onDelete: (chip: IndexedChip) => void;
+}
+
+/**
+ * Mỗi nhóm khớp (vd. eMCP · A1) là một cột riêng nằm cạnh nhau, tiêu đề cột cố định ở
+ * trên — giống hệt cách thợ đọc bảng tra gốc, thay vì phải cuộn qua từng khối xếp chồng.
+ */
+export function ResultColumns({ buckets, query, mixedScores, canEdit, onEdit, onDelete }: ResultColumnsProps) {
+  return (
+    <div className="result-columns">
+      {buckets.map((bucket) => (
+        <div className="result-column" key={`${bucket.table}-${bucket.name}`}>
+          <div className="column-head">
+            <h3>
+              {bucket.table} · {bucket.name}
+              {bucket.cap ? ` · ${bucket.cap}` : ""}
+            </h3>
+            <em>{bucket.hits.length}</em>
+          </div>
+          <div className="column-body">
+            {bucket.hits.map(({ chip, score }) => (
+              <ChipRow
+                key={chip.id}
+                chip={chip}
+                query={query}
+                strong={mixedScores && score === 0}
+                showGroup={false}
+                canEdit={canEdit}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

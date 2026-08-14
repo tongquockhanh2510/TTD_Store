@@ -6,7 +6,8 @@
       "PowerShell(npm install --prefix T:\\\\TTD --no-audit --no-fund 2>&1)",
       "PowerShell(\"--- node_modules ---\")",
       "mcp__visualize__read_me",
-      "mcp__visualize__show_widget"
+      "mcp__visualize__show_widget",
+      "Bash(npm run *)"
     ]
   }
 }

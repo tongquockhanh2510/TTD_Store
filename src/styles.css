@@ -581,6 +581,56 @@ a.icon-btn {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   margin-top: 4px;
 }
+
+.result-columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 4px;
+}
+.result-column {
+  flex: 1 1 260px;
+  min-width: 240px;
+  max-width: 360px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: var(--shadow);
+}
+.column-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 4px 10px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--amber-line);
+}
+.column-head h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--amber-2);
+}
+.column-head em {
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--txt-3);
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.column-body .item {
+  background: var(--panel);
+}
 .item {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -922,6 +972,10 @@ footer b {
   }
   .result-grid {
     grid-template-columns: 1fr;
+  }
+  .result-column {
+    flex-basis: 100%;
+    max-width: none;
   }
   .group-grid {
     grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));

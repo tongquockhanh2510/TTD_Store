@@ -7,7 +7,7 @@ import { indexAll, indexChip, searchChips } from "./lib/search";
 import { clearLegacyItems, clearVault, readLegacyItems, readVault, writeVault } from "./lib/storage";
 import { LoginGate, SetupGate, UnsupportedGate } from "./components/Gate";
 import { LogoMark } from "./components/Logo";
-import { ChipRow, GroupGrid, Section } from "./components/ChipList";
+import { ChipRow, GroupGrid, ResultColumns, Section } from "./components/ChipList";
 import { ExportModal, ImportModal, ItemFormModal, PasswordModal } from "./components/Modals";
 
 type Screen = "setup" | "login" | "app" | "unsupported";
@@ -396,28 +396,14 @@ export default function App() {
               ) : null}
             </div>
           ) : (
-            hitsByGroup.map((bucket) => (
-              <Section
-                key={`${bucket.table}-${bucket.name}`}
-                title={`${bucket.table} · ${bucket.name}${bucket.cap ? ` · ${bucket.cap}` : ""}`}
-                count={bucket.hits.length}
-              >
-                <div className="result-grid">
-                  {bucket.hits.map(({ chip, score }) => (
-                    <ChipRow
-                      key={chip.id}
-                      chip={chip}
-                      query={query}
-                      strong={mixedScores && score === 0}
-                      showGroup={false}
-                      canEdit={isOwner && manage}
-                      onEdit={(target) => setModal({ kind: "form", chip: target })}
-                      onDelete={deleteItem}
-                    />
-                  ))}
-                </div>
-              </Section>
-            ))
+            <ResultColumns
+              buckets={hitsByGroup}
+              query={query}
+              mixedScores={mixedScores}
+              canEdit={isOwner && manage}
+              onEdit={(target) => setModal({ kind: "form", chip: target })}
+              onDelete={deleteItem}
+            />
           )
         ) : group ? (
           <>
