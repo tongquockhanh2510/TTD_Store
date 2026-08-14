@@ -107,5 +107,5 @@ Mã được chuẩn hoá bằng cách bỏ hết dấu cách, gạch nối, g�
 
 Kết quả xếp theo độ khớp: khớp từ đầu mã lên trước, rồi tới khớp từ đầu một đoạn, cuối cùng là
 khớp ở giữa. Những ô gộp nhiều mã như `JZ006-JZ018-JZ050` được giữ nguyên như trong ảnh gốc,
-nhưng gõ riêng `JZ018` vẫn tìm thấy.
+nhưng gõ riêng `JZ018` vẫn tìm thấy.âsdfsad
 
